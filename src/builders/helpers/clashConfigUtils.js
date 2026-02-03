@@ -81,3 +81,23 @@ export function sanitizeClashProxyGroups(config) {
         return { ...group, proxies: filtered };
     });
 }
+
+export function sanitizeClashDnsNameserverPolicy(config) {
+    const dns = config?.dns;
+    const policy = dns?.['nameserver-policy'];
+    if (!dns || !policy || typeof policy !== 'object' || Array.isArray(policy)) {
+        return;
+    }
+
+    const sanitized = {};
+    Object.entries(policy).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+            if (value.length > 0) {
+                sanitized[key] = value[0];
+            }
+            return;
+        }
+        sanitized[key] = value;
+    });
+    dns['nameserver-policy'] = sanitized;
+}

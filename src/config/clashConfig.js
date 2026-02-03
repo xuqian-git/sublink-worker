@@ -36,14 +36,10 @@ export const CLASH_CONFIG = {
 			'https://223.5.5.5/dns-query'
 		],
 		'nameserver-policy': {
-			'geosite:cn,private': [
-				'https://120.53.53.53/dns-query',
-				'https://223.5.5.5/dns-query'
-			],
-			'geosite:geolocation-!cn': [
-				'https://dns.cloudflare.com/dns-query',
-				'https://dns.google/dns-query'
-			]
+			// NOTE: Some Clash cores (e.g. legacy Clash used by older GUIs) expect policy values to be a string,
+			// and will throw "cannot unmarshal !!seq into string" if a YAML sequence is used here.
+			'geosite:cn,private': 'https://120.53.53.53/dns-query',
+			'geosite:geolocation-!cn': 'https://dns.cloudflare.com/dns-query'
 		}
 	},
 	'proxies': [],

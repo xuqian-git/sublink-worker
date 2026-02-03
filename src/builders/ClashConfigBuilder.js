@@ -4,7 +4,7 @@ import { BaseConfigBuilder } from './BaseConfigBuilder.js';
 import { deepCopy, groupProxiesByCountry } from '../utils.js';
 import { addProxyWithDedup } from './helpers/proxyHelpers.js';
 import { buildSelectorMembers, buildNodeSelectMembers, uniqueNames } from './helpers/groupBuilder.js';
-import { emitClashRules, sanitizeClashProxyGroups } from './helpers/clashConfigUtils.js';
+import { emitClashRules, sanitizeClashDnsNameserverPolicy, sanitizeClashProxyGroups } from './helpers/clashConfigUtils.js';
 import { normalizeGroupName, findGroupIndexByName } from './helpers/groupNameUtils.js';
 
 /**
@@ -631,6 +631,9 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
             this.config['external-ui-url'] = uiUrl;
             this.config['secret'] = secret;
         }
+
+        // Compatibility: some Go-based Clash cores expect nameserver-policy values to be strings, not YAML sequences
+        sanitizeClashDnsNameserverPolicy(this.config);
 
         return yaml.dump(this.config);
     }
